@@ -1,0 +1,45 @@
+
+<h1> NHS Patient CRUD Operation</h1>
+<h3 *ngIf="patientIdToUpdate; else create"> 
+   Update Patient for Id: {{patientIdToUpdate}}
+   
+   
+</h3>
+<ng-template #create>
+   <h3> Add New Patient </h3>
+</ng-template>
+<div>
+ <form [formGroup]="patientForm" (ngSubmit)="onPatientFormSubmit()" >
+  <table border="solid">
+    <tr><td>Id</td><td><input  type="text" formControlName="patientId" value={{patientId}}  />
+   	</td></tr>
+    <tr><td>Enter Name</td><td><input type="text" formControlName="name"  value={{name}}/>
+	       <label *ngIf="patientForm.get('name').invalid && processValidation" [ngClass] = "'error'"> Name is required. </label>
+	</td></tr>	
+  
+    <tr><td colspan="2">
+	    <button *ngIf="!patientIdToUpdate" >  CREATE </button>  
+		<button *ngIf="patientIdToUpdate"> Update </button>  
+	    <button (click)="backToCreatePatient()" *ngIf="patientIdToUpdate">Go Back</button>  
+	</td></tr>
+  </table>
+ </form> 
+ <br/>
+ <div *ngIf="statusCode; else processing">
+   <div *ngIf="statusCode === 201" [ngClass] = "'success'">
+	    Patient added successfully.
+   </div>   
+   <div *ngIf="statusCode === 409" [ngClass] = "'success'">
+        Patient already exists.
+   </div>   	
+   <div *ngIf="statusCode === 200" [ngClass] = "'success'">
+        Patient updated successfully.
+   </div>   	      
+   <div *ngIf="statusCode === 204" [ngClass] = "'success'">
+        Patient deleted successfully.
+   </div>   	   
+   <div *ngIf="statusCode === 500" [ngClass] = "'error'">
+        Internal Server Error.
+   </div>   	
+ </div>
+ 

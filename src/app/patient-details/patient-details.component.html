@@ -1,0 +1,38 @@
+
+<div *ngIf= "allPatients!=undefined && allPatients.length>0 "> 
+
+<ng-template #processing>
+	<img *ngIf="requestProcessing" src="assets/images/loading.gif"/>
+ </ng-template>
+
+<h3>Patient Details</h3>
+<table>
+  <tr><th> Id</th> <th>Name</th><th></th><th></th></tr>
+  <tr *ngFor="let patient of allPatients" >
+    <td>{{patient.patientId}}</td> <td>{{patient.name}}</td> 
+	<td><button type="button" (click)="loadPatientToEdit(patient.patientId)" >Edit</button> </td> 
+	<td><button type="button" (click)="deletePatient(patient.patientId)">Delete</button></td>
+  </tr>
+</table>
+ 
+<div *ngIf="statusCode; else processing">
+   <div *ngIf="statusCode === 201" [ngClass] = "'success'">
+	    Patient added successfully.
+   </div>   
+   <div *ngIf="statusCode === 409" [ngClass] = "'success'">
+        Patient already exists.
+   </div>   	
+   <div *ngIf="statusCode === 200" [ngClass] = "'success'">
+        Patient updated successfully.
+   </div>   	      
+   <div *ngIf="statusCode === 204" [ngClass] = "'success'">
+        Patient deleted successfully.
+   </div>   	   
+   <div *ngIf="statusCode === 500" [ngClass] = "'error'">
+        Internal Server Error.
+   </div>   	
+ </div>
+</div>
+<div *ngIf= "allPatients==undefined || allPatients.length==0 "> 
+              No Patient At moment
+</div>
